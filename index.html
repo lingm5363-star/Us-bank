@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Horizon - Financial Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==================== VIEW 1: PUBLIC HOMEPAGE ==================== -->
+    <div id="view-homepage" class="app-view active">
+        <header class="nav-bar">
+            <div class="brand-title">Apex Horizon</div>
+            <button class="nav-btn" onclick="navigateTo('view-login')">Access Platform</button>
+        </header>
+        <main class="hero-section">
+            <h1>Next-Generation Digital Asset Management</h1>
+            <p>A secure framework designed for managing professional portfolios, capital distribution, and corporate accounting pipelines effortlessly.</p>
+            <button class="nav-btn" style="padding: 15px 30px; font-size: 16px;" onclick="navigateTo('view-login')">Get Started Today</button>
+        </main>
+    </div>
+
+    <!-- ==================== VIEW 2: LOGIN PORTAL ==================== -->
+    <div id="view-login" class="app-view">
+        <header class="nav-bar">
+            <div class="brand-title" onclick="navigateTo('view-homepage')" style="cursor:pointer;">Apex Horizon</div>
+        </header>
+        <main class="login-container">
+            <div class="login-card">
+                <h2 style="margin-bottom: 20px;">Platform Login</h2>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">User Identification</label>
+                        <input type="text" id="username" class="form-control" placeholder="Enter custom ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Security Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="nav-btn" style="width: 100%; padding: 12px;">Verify Identity</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== VIEW 3: SECURE DASHBOARD ==================== -->
+    <div id="view-dashboard" class="app-view">
+        <div class="dashboard-layout">
+            <aside class="sidebar">
+                <div class="brand-title">Apex Horizon</div>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item active">Account Overview</li>
+                    <li class="sidebar-item">Asset Transfers</li>
+                    <li class="sidebar-item" onclick="navigateTo('view-homepage')">Terminate Session</li>
+                </ul>
+            </aside>
+            <main class="dashboard-content">
+                <h2 style="margin-bottom: 24px;">Welcome Back, Administrator</h2>
+                
+                <div class="summary-card">
+                    <h3>Available Operational Capital</h3>
+                    <div class="balance">$248,510.42</div>
+                </div>
+
+                <div class="transaction-list">
+                    <h3 style="margin-bottom: 15px;">Recent Platform Log Activity</h3>
+                    <div class="transaction-row">
+                        <div>
+                            <strong>Infrastructure Subscription</strong>
+                            <p style="color: var(--text-muted); font-size: 12px;">Nov 05, 2026</p>
+                        </div>
+                        <span class="tx-negative">-$120.00</span>
+                    </div>
+                    <div class="transaction-row">
+                        <div>
+                            <strong>Inbound Liquidity Provision</strong>
+                            <p style="color: var(--text-muted); font-size: 12px;">Nov 03, 2026</p>
+                        </div>
+                        <span style="color: var(--accent);">+$15,000.00</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
