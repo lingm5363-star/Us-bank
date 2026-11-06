@@ -31,7 +31,6 @@
             display: flex;
         }
 
-        /* Sidebar Navigation Layout */
         .sidebar {
             width: 250px;
             background-color: var(--bg-card);
@@ -69,7 +68,6 @@
             color: white;
         }
 
-        /* Main Form Layout */
         .dashboard-content {
             flex: 1;
             padding: 40px;
@@ -121,9 +119,8 @@
             background-color: var(--accent-hover);
         }
 
-        /* LOADING ANIMATION STYLES */
         .loading-container {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg-main);
@@ -152,14 +149,12 @@
 </head>
 <body>
 
-    <!-- Wastes time loader frame inside the separate page -->
     <div id="transfer-loader" class="loading-container">
         <div class="spinner"></div>
         <h2>Processing Asset Transfer...</h2>
         <p style="color: var(--text-muted); margin-top: 8px;">Routing transaction safely through network logs.</p>
     </div>
 
-    <!-- Sidebar Menu navigation matching the core template layout -->
     <aside class="sidebar">
         <a href="index.html" class="brand-title">Apex Horizon</a>
         <ul class="sidebar-menu">
@@ -169,7 +164,6 @@
         </ul>
     </aside>
 
-    <!-- Main Transfer Inputs Form -->
     <main class="dashboard-content">
         <h2 style="margin-bottom: 24px;">Initiate Asset Transfer</h2>
         <div class="transfer-card">
@@ -201,7 +195,6 @@
         function executeExternalTransfer(event) {
             event.preventDefault();
             
-            // Read active setup variables out of system memory
             let savedBalance = localStorage.getItem('walletBalance');
             let currentBalance = savedBalance ? parseFloat(savedBalance) : 248510.42;
             
@@ -213,15 +206,12 @@
                 return;
             }
 
-            // Display our full-screen time-waster animation loop
             document.getElementById('transfer-loader').style.display = 'flex';
             
             setTimeout(() => {
-                // Calculate and commit updates cleanly to shared memory
                 currentBalance -= amount;
                 localStorage.setItem('walletBalance', currentBalance);
 
-                // Create a record of this transaction to pass to index.html
                 let history = localStorage.getItem('txHistory');
                 let txList = history ? JSON.parse(history) : [];
                 
@@ -232,11 +222,9 @@
                 });
 
                 localStorage.setItem('txHistory', JSON.stringify(txList));
-
-                // Send user back to index.html dashboard and skip the login
                 localStorage.setItem('stayLoggedIn', 'true');
                 window.location.href = "index.html";
-            }, 4000); // 4-second processing speed
+            }, 4000);
         }
     </script>
 </body>
