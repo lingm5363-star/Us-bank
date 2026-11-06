@@ -14,6 +14,7 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border: #475569;
+            --danger: #ef4444;
         }
 
         * {
@@ -119,9 +120,44 @@
         .nav-btn:hover {
             background-color: var(--accent-hover);
         }
+
+        /* LOADING ANIMATION STYLES */
+        .loading-container {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-main);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--bg-input);
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Wastes time loader frame inside the separate page -->
+    <div id="transfer-loader" class="loading-container">
+        <div class="spinner"></div>
+        <h2>Processing Asset Transfer...</h2>
+        <p style="color: var(--text-muted); margin-top: 8px;">Routing transaction safely through network logs.</p>
+    </div>
 
     <!-- Sidebar Menu navigation matching the core template layout -->
     <aside class="sidebar">
@@ -129,7 +165,7 @@
         <ul class="sidebar-menu">
             <li class="sidebar-item"><a href="index.html">Account Overview</a></li>
             <li class="sidebar-item active"><a href="transfer.html">Asset Transfers</a></li>
-            <li class="sidebar-item"><a href="index.html">Terminate Session</a></li>
+            <li class="sidebar-item"><a href="index.html?logout=true">Terminate Session</a></li>
         </ul>
     </aside>
 
@@ -164,15 +200,43 @@
     <script>
         function executeExternalTransfer(event) {
             event.preventDefault();
-            const btn = event.target.querySelector('.nav-btn');
-            btn.disabled = true;
-            btn.innerText = "Processing Transfer Setup...";
             
-            // Simulates processing before providing user confirmation
+            // Read active setup variables out of system memory
+            let savedBalance = localStorage.getItem('walletBalance');
+            let currentBalance = savedBalance ? parseFloat(savedBalance) : 248510.42;
+            
+            const recipient = document.getElementById('recipient-name').value;
+            const amount = parseFloat(document.getElementById('transfer-amount').value);
+
+            if (amount > currentBalance) {
+                alert('Transaction Failed: Insufficient funds in primary capital account.');
+                return;
+            }
+
+            // Display our full-screen time-waster animation loop
+            document.getElementById('transfer-loader').style.display = 'flex';
+            
             setTimeout(() => {
-                alert('Transfer initialized successfully. Returning to main overview.');
+                // Calculate and commit updates cleanly to shared memory
+                currentBalance -= amount;
+                localStorage.setItem('walletBalance', currentBalance);
+
+                // Create a record of this transaction to pass to index.html
+                let history = localStorage.getItem('txHistory');
+                let txList = history ? JSON.parse(history) : [];
+                
+                txList.unshift({
+                    name: recipient,
+                    amount: amount,
+                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+                });
+
+                localStorage.setItem('txHistory', JSON.stringify(txList));
+
+                // Send user back to index.html dashboard and skip the login
+                localStorage.setItem('stayLoggedIn', 'true');
                 window.location.href = "index.html";
-            }, 3000);
+            }, 4000); // 4-second processing speed
         }
     </script>
 </body>
